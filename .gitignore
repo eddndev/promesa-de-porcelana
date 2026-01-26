@@ -1,0 +1,41 @@
+# Godot-specific ignores
+.godot/
+*.translation
+
+# Imported translations (automatically generated from CSV files)
+*.translation.remap
+
+# Mono-specific ignores
+.mono/
+Assemblies/
+bin/
+obj/
+*.csproj
+*.sln
+
+# Godot 4+ specific ignores
+.godot/
+project.godot.
+project.binary
+
+# Other common ignores
+.import/
+export.cfg
+export_presets.cfg
+
+# Asset-specific ignores
+*.blend1
+*.blend2
+*.kra~
+*.png~
+*.jpg~
+*.aseprite~
+
+# Backup files
+*.bak
+*.swp
+*~
+*.tmp
+*.DS_Store
+*.directory
+Thumbs.db
