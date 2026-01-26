@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main_script"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main_script")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 440.0
+offset_top = 310.0
+offset_right = 840.0
+offset_bottom = 410.0
+theme_override_font_sizes/font_size = 48
+text = "Promesa de Porcelana"
+horizontal_alignment = 1
+vertical_alignment = 1
