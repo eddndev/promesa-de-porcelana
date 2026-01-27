@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://nsujq4k11b42"]
+
+[ext_resource type="Script" uid="uid://bglrlmi85br73" path="res://scripts/characters/filberto_player.gd" id="1_mqxfg"]
+[ext_resource type="Script" uid="uid://cqka38cnmi4e3" path="res://scripts/camera.gd" id="2_v0811"]
+[ext_resource type="PackedScene" uid="uid://bctoa7dqfitco" path="res://scenes/ui/gui.tscn" id="3_ljha4"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_w632o"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_w632o"]
+
+[node name="FilbertoPlayer" type="CharacterBody3D" unique_id=192192731]
+script = ExtResource("1_mqxfg")
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="." unique_id=1334302414]
+mesh = SubResource("CapsuleMesh_w632o")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1656180820]
+shape = SubResource("CapsuleShape3D_w632o")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=998695570]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38280255, 0)
+script = ExtResource("2_v0811")
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera3D" unique_id=23216445]
+target_position = Vector3(0, 0, -2.5)
+
+[node name="Gui" parent="." unique_id=944925683 instance=ExtResource("3_ljha4")]

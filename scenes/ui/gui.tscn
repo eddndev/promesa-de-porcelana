@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://bctoa7dqfitco"]
+
+[ext_resource type="Texture2D" uid="uid://hmyx33ela0pv" path="res://icon.svg" id="1_fjuye"]
+
+[node name="Gui" type="CanvasLayer" unique_id=944925683]
+
+[node name="Control" type="Control" parent="." unique_id=912919956]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control" unique_id=951302892]
+modulate = Color(1, 1, 1, 0.44313726)
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_fjuye")
+expand_mode = 1
