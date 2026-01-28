@@ -3,14 +3,14 @@ class_name Filberto extends CharacterBody3D
 # Variables de movimiento
 
 @export_category("Movimiento")
-@export var speed : float = 425.0
-@export var gravity : float = 84.0
-@export var jump_force : float = 1250.0
+@export var speed : float = 5.0
+@export var gravity : float = 20.0
+@export var jump_force : float = 9.0
 
 # Variables
 
 @export_category("Fixes")
-@export var coyote_time : float = .02
+@export var coyote_time : float = 0.15
 var can_jump : bool = false
 
 # Nodos
@@ -20,56 +20,49 @@ var can_jump : bool = false
 
 # Funciones
 
-func get_axis() -> Vector2: # Devolvera una direccion de vector dependiendo de las teclas presionadas
+func get_axis() -> Vector2:
 	var axis : Vector2 = Vector2.ZERO
-	axis.x = int(Input.is_action_pressed("derecha")) - int(Input.is_action_pressed("izquierda"))
-	axis.y = int(Input.is_action_pressed("atras")) - int(Input.is_action_pressed("adelante"))
+	axis.x = Input.get_axis("izquierda", "derecha")
+	axis.y = Input.get_axis("adelante", "atras")
 	return axis
 
-func move_crtl(delta : float) -> void:
-	# Se calcula una direccion relativa para donde se rote el jugador
-	var direction = (transform.basis * Vector3(get_axis().x, 0, get_axis().y)).normalized() 
-	if Input.is_action_pressed("sigilo"):
-		direction /= 3.0
-	# Se aplican las fuerzas a los lados
-	velocity.x = direction.x * speed * delta
-	velocity.z = direction.z * speed * delta
-	# Se aplica gravedad cuando no se esta en el suelo
-	if !is_on_floor():
-		velocity.y += -gravity * delta
-	move_and_slide()
-
-func jump(delta : float) -> void: # Funcion de salto
-	if is_on_floor(): can_jump = true # Permitir salto
-	elif !is_on_floor() and can_jump:
+func _physics_process(delta: float) -> void:
+	# Gravedad
+	if not is_on_floor():
+		velocity.y -= gravity * delta
+	
+	# Coyote Time y Estado de Salto
+	if is_on_floor():
+		can_jump = true
+		coyote.stop()
+	elif can_jump and coyote.is_stopped():
 		coyote.start(coyote_time)
-	if Input.is_action_pressed("saltar") and can_jump:
+
+	# Salto
+	if Input.is_action_just_pressed("saltar") and can_jump:
+		velocity.y = jump_force
 		can_jump = false
-		velocity.y = jump_force * delta
-
-func _process(delta : float) -> void:
-	move_crtl(delta)
-	jump(delta)
-
-func _input(_event: InputEvent) -> void:
-	# Cuando ya no se presiona espacio se divide la velocidad para regular el salto
+	
+	# Salto Variable (soltar botón reduce altura)
 	if Input.is_action_just_released("saltar") and velocity.y > 0:
-		velocity.y /= 5
-	# Para ir mas lento
+		velocity.y *= 0.5
 
+	# Movimiento
+	var input_dir = get_axis()
+	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	
+	var current_speed = speed
+	if Input.is_action_pressed("sigilo"):
+		current_speed /= 3.0
 
-"""
-Para Edd:
-Ya que vas a realizar un calculo para que los FPS a los que corre el juego sean los mismos que permita
-el computador del usuario, ten en cuenta la funcion procces y su parametro delta el cual pasaras a las
-funciones correspondientes y multiplicaras por este cada que afecte a una fisica especifica.
+	if direction:
+		velocity.x = direction.x * current_speed
+		velocity.z = direction.z * current_speed
+	else:
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.z = move_toward(velocity.z, 0, current_speed)
 
-delta = tiempo de cambio entre frame
-
-exite otra funcion que es _physics_process(delta) que siempre seran 60 fps (configurable)
-
-"""
-
+	move_and_slide()
 
 func _on_coyote_timeout() -> void:
 	can_jump = false
