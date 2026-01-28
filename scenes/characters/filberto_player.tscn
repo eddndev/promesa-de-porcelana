@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://bglrlmi85br73" path="res://scripts/characters/filberto_player.gd" id="1_mqxfg"]
 [ext_resource type="Script" uid="uid://cqka38cnmi4e3" path="res://scripts/camera.gd" id="2_v0811"]
 [ext_resource type="PackedScene" uid="uid://bctoa7dqfitco" path="res://scenes/ui/gui.tscn" id="3_ljha4"]
+[ext_resource type="PackedScene" uid="uid://ibjptum4b3jm" path="res://scenes/ui/pause.tscn" id="4_s48gs"]
+[ext_resource type="PackedScene" uid="uid://cgjnulrqy83ms" path="res://main/ps1_filter.tscn" id="5_kiqjc"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_w632o"]
 
@@ -25,3 +27,13 @@ script = ExtResource("2_v0811")
 target_position = Vector3(0, 0, -2.5)
 
 [node name="Gui" parent="." unique_id=944925683 instance=ExtResource("3_ljha4")]
+
+[node name="Pause" parent="." unique_id=2050203930 instance=ExtResource("4_s48gs")]
+
+[node name="Coyote" type="Timer" parent="." unique_id=799927664]
+wait_time = 0.05
+one_shot = true
+
+[node name="Ps1Filter" parent="." unique_id=210368560 instance=ExtResource("5_kiqjc")]
+
+[connection signal="timeout" from="Coyote" to="." method="_on_coyote_timeout"]

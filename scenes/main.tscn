@@ -2,20 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cbip18dv88h40" path="res://scripts/main.gd" id="1_main_script"]
 [ext_resource type="PackedScene" uid="uid://nsujq4k11b42" path="res://scenes/characters/filberto_player.tscn" id="2_0wfyh"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
-sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-
-[sub_resource type="Sky" id="Sky_1"]
-sky_material = SubResource("ProceduralSkyMaterial_1")
-
-[sub_resource type="Environment" id="Environment_1"]
-background_mode = 2
-sky = SubResource("Sky_1")
-tonemap_mode = 2
-glow_enabled = true
+[ext_resource type="PackedScene" uid="uid://0l2wqfc2mj2u" path="res://scenes/world_config.tscn" id="3_sugp2"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_0wfyh"]
 
@@ -24,13 +11,6 @@ size = Vector3(10, 1, 10)
 
 [node name="Main" type="Node3D" unique_id=395749443]
 script = ExtResource("1_main_script")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1488438021]
-environment = SubResource("Environment_1")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2034997232]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
-shadow_enabled = true
 
 [node name="FilbertoPlayer" parent="." unique_id=192192731 instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.066977024, 1.4599427, 0.107843116)
@@ -57,3 +37,15 @@ shape = SubResource("BoxShape3D_0wfyh")
 [node name="Box" type="CSGBox3D" parent="StaticBody3D2" unique_id=208327235]
 use_collision = true
 size = Vector3(10, 1, 10)
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="." unique_id=2033234028]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D3" unique_id=1009747795]
+shape = SubResource("BoxShape3D_0wfyh")
+
+[node name="Box" type="CSGBox3D" parent="StaticBody3D3" unique_id=2062928745]
+use_collision = true
+size = Vector3(10, 1, 10)
+
+[node name="WorldConfig" parent="." unique_id=1620453813 instance=ExtResource("3_sugp2")]

@@ -4,10 +4,25 @@ extends Camera3D
 
 @export var mouse_sensibility : float = 0.005
 
+# Objetos
+
+@onready var raycast : RayCast3D = $RayCast3D
+
 # Funciones
+
+func interact() -> void:
+	# Aqui se programara el comportamiendo de un raycast para interactuar con objetos
+	if raycast.is_colliding():
+		var object = raycast.get_collider()
+		# if object is interactuar:
+		print(object.name)
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED # Aqui se pone para que desaparezca el puntero
+
+func _process(_delta: float) -> void:
+	#interact()
+	pass
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion: 

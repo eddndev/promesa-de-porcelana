@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://cgjnulrqy83ms"]
+
+[ext_resource type="Shader" uid="uid://bxmuw8dcvwu62" path="res://test/PS1.gdshader" id="1_viiww"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1k5ow"]
+shader = ExtResource("1_viiww")
+shader_parameter/color_levels = 14.0
+shader_parameter/chromatic_aberration = 0.008
+shader_parameter/blur_amount = 1.0
+shader_parameter/brightness = 1.2
+shader_parameter/saturation = 1.0
+shader_parameter/color_offset_multiplier = 0.0
+shader_parameter/black_offset_multiplier = 0.1
+shader_parameter/color_offset = 0.005
+
+[node name="Ps1Filter" type="CanvasLayer" unique_id=210368560]
+layer = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=808279634]
+material = SubResource("ShaderMaterial_1k5ow")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

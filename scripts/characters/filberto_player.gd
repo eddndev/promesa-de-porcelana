@@ -2,13 +2,21 @@ class_name Filberto extends CharacterBody3D
 
 # Variables de movimiento
 
+@export_category("Movimiento")
 @export var speed : float = 425.0
-@export var gravity : float = 85.0
-@export var jump_force : float = 1200.0
+@export var gravity : float = 84.0
+@export var jump_force : float = 1250.0
+
+# Variables
+
+@export_category("Fixes")
+@export var coyote_time : float = .02
+var can_jump : bool = false
 
 # Nodos
 
 @onready var camera : Camera3D = $Camera3D
+@onready var coyote : Timer = $Coyote
 
 # Funciones
 
@@ -32,17 +40,21 @@ func move_crtl(delta : float) -> void:
 	move_and_slide()
 
 func jump(delta : float) -> void: # Funcion de salto
-	if Input.is_action_pressed("saltar") and is_on_floor():
-		velocity.y += jump_force * delta
+	if is_on_floor(): can_jump = true # Permitir salto
+	elif !is_on_floor() and can_jump:
+		coyote.start(coyote_time)
+	if Input.is_action_pressed("saltar") and can_jump:
+		can_jump = false
+		velocity.y = jump_force * delta
 
 func _process(delta : float) -> void:
 	move_crtl(delta)
 	jump(delta)
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	# Cuando ya no se presiona espacio se divide la velocidad para regular el salto
 	if Input.is_action_just_released("saltar") and velocity.y > 0:
-		velocity.y /= 10
+		velocity.y /= 5
 	# Para ir mas lento
 
 
@@ -57,3 +69,7 @@ delta = tiempo de cambio entre frame
 exite otra funcion que es _physics_process(delta) que siempre seran 60 fps (configurable)
 
 """
+
+
+func _on_coyote_timeout() -> void:
+	can_jump = false
