@@ -47,6 +47,12 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_released("saltar") and velocity.y > 0:
 		velocity.y *= 0.5
 
+	# Lente del Arrepentimiento
+	if Input.is_action_pressed("lente"):
+		GLOBAL.toggle_lens(true)
+	else:
+		GLOBAL.toggle_lens(false)
+
 	# Movimiento
 	var input_dir = get_axis()
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
