@@ -12,6 +12,8 @@ size = Vector3(10, 1, 10)
 [node name="Main" type="Node3D" unique_id=395749443]
 script = ExtResource("1_main_script")
 
+[node name="Ps1Filter" parent="." instance=ExtResource("res://main/ps1_filter.tscn")]
+
 [node name="FilbertoPlayer" parent="." unique_id=192192731 instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.066977024, 1.4599427, 0.107843116)
 
