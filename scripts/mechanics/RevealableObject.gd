@@ -1,45 +1,43 @@
 class_name RevealableObject extends Node3D
 
-@export var inverse: bool = false # Si es true, desaparece al usar el lente.
-@onready var visual_mesh: MeshInstance3D = null
-@onready var collider: CollisionShape3D = null
+@export var inverse: bool = false 
+# inverse = false: Objeto oculto que APARECE con el lente. (Debe estar en Capa 2)
+# inverse = true: Objeto real que DESAPARECE con el lente. (Más complejo con capas, por ahora lo manejamos con visibilidad manual si es necesario, o usando Capa 1 y script)
 
 func _ready() -> void:
-	# Intentar encontrar hijos comunes automáticamente si no se asignan manualmente
-	# Esto facilita el level design: Solo arrastras el script al nodo padre.
-	for child in get_children():
-		if child is MeshInstance3D:
-			visual_mesh = child
-		elif child is CollisionShape3D:
-			collider = child
-		elif child is StaticBody3D:
-			# Si el script está en la raíz y la colisión está adentro
-			for subchild in child.get_children():
-				if subchild is CollisionShape3D:
-					collider = subchild
-			
-	
-	# Conectar a la señal global
-	GLOBAL.connect("lens_toggled", Callable(self, "_on_lens_toggled"))
-	
-	# Estado inicial
-	_update_state(GLOBAL.is_lens_active)
-
-func _on_lens_toggled(active: bool) -> void:
-	_update_state(active)
-
-func _update_state(lens_active: bool) -> void:
-	var should_be_visible = lens_active
-	
 	if inverse:
-		should_be_visible = !lens_active
-		
-	# Aplicar visibilidad
-	if visual_mesh:
-		visual_mesh.visible = should_be_visible
+		# Para objetos inversos (obstáculos que desaparecen),
+		# Mantener lógica antigua de señales es mejor porque "Capa que desaparece" no es standard.
+		GLOBAL.connect("lens_toggled", Callable(self, "_on_lens_toggled_inverse"))
+		_on_lens_toggled_inverse(GLOBAL.is_lens_active)
 	else:
-		visible = should_be_visible # Fallback: ocultar todo el nodo
+		# Para objetos ocultos normales:
+		# Simplemente los movemos a la CAPA 2 (Capa de Lente).
+		_set_layer_recursive(self, 2)
+
+func _set_layer_recursive(node: Node, layer_bit: int) -> void:
+	# Godot usa bitmasks. Capa 2 = Valor 2.
+	
+	if node is VisualInstance3D: # MeshInstance3D, etc.
+		node.layers = layer_bit
 		
-	# Aplicar colisión
-	if collider:
-		collider.disabled = !should_be_visible
+	if node is CollisionObject3D: # StaticBody, Area, etc.
+		node.collision_layer = layer_bit
+		# node.collision_mask = layer_bit # Opcional, depende de con qué quiera chocar el objeto
+		
+	for child in node.get_children():
+		_set_layer_recursive(child, layer_bit)
+
+func _on_lens_toggled_inverse(active: bool) -> void:
+	# Si el lente está activo, el objeto inverso se oculta.
+	visible = !active
+	
+	# Desactivar colisiones
+	_set_collision_disabled_recursive(self, active)
+
+func _set_collision_disabled_recursive(node: Node, disabled: bool) -> void:
+	if node is CollisionShape3D or node is CollisionPolygon3D:
+		node.disabled = disabled
+	
+	for child in node.get_children():
+		_set_collision_disabled_recursive(child, disabled)

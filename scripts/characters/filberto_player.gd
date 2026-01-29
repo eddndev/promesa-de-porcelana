@@ -20,6 +20,22 @@ var can_jump : bool = false
 
 # Funciones
 
+func _ready() -> void:
+	# Conectar señal del lente global
+	GLOBAL.connect("lens_toggled", Callable(self, "_on_lens_toggled"))
+	# Estado inicial: Solo ver capa 1 (Realidad)
+	_on_lens_toggled(GLOBAL.is_lens_active)
+
+func _on_lens_toggled(active: bool) -> void:
+	if active:
+		# Ver Capa 1 (Normal) + Capa 2 (Oculta) = Bitmask 3 (1 | 2)
+		camera.cull_mask = 3 
+		collision_mask = 3 # Chocar con ambas realidades
+	else:
+		# Solo Ver Capa 1 = Bitmask 1
+		camera.cull_mask = 1
+		collision_mask = 1 # Solo chocar con realidad normal
+
 func get_axis() -> Vector2:
 	var axis : Vector2 = Vector2.ZERO
 	axis.x = Input.get_axis("izquierda", "derecha")
